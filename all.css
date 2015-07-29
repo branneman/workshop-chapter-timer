@@ -1,0 +1,82 @@
+/**
+ * Common
+ */
+* {
+    box-sizing: border-box;
+}
+body {
+    font-family: 'Open Sans', 'Droid Sans', Arial, sans-serif;
+    font-size: 18px;
+    line-height: 24px;
+}
+main {
+    width: 80%;
+    max-width: 1024px;
+    margin: 25px auto;
+}
+
+/**
+ * Clock
+ */
+.clock {
+    display: block;
+    margin-bottom: 12px;
+    font-family: Consolas, '', monospace;
+    font-size: 36px;
+    line-height: 36px;
+    text-align: center;
+}
+
+/**
+ * Chapters
+ */
+.chapters {
+    margin: 0;
+    padding: 0;
+    font-size: 0;
+}
+.chapters li {
+    margin-bottom: 12px;
+}
+@media (min-width: 768px) {
+    .chapters .progress,
+    .chapters .title {
+        display: inline-block;
+        vertical-align: top;
+    }
+    .chapters .progress {
+        width: 60%;
+    }
+    .chapters .title {
+        width: 40%;
+        padding-left: 12px;
+    }
+}
+.chapters .progress {
+    position: relative;
+    height: 24px;
+    overflow: hidden;
+    border-radius: 4px;
+}
+.chapters .progress .talk,
+.chapters .progress .exercises,
+.chapters .progress .solutions,
+.chapters .progress .bar {
+    display: inline-block;
+    height: 100%;
+}
+.chapters .progress .bar {
+    position: absolute; top: 0; right: 0; bottom: 0; left: 0;
+    opacity: .4;
+    background: crimson;
+}
+.chapters .title {
+    height: 24px;
+    font-size: 18px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.chapters .progress .talk      { background: rgba(143, 188, 143, .2); }
+.chapters .progress .exercises { background: rgba(34, 139, 34, .2); }
+.chapters .progress .solutions { background: rgba(0, 100, 0, .2); }

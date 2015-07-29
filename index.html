@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Workshop Chapter Timer</title>
+    <link rel="stylesheet" href="all.css">
+</head>
+<body>
+
+    <main>
+        <time class="clock"></time>
+        <ol class="chapters">
+            <li>
+                <div class="progress">
+                    <div class="talk" style="width:32%"></div>
+                    <div class="exercises" style="width:50%"></div>
+                    <div class="solutions" style="width:18%"></div>
+                    <div class="bar" style="width:75%"></div>
+                </div>
+                <div class="title">Type Signatures</div>
+            </li>
+        </ol>
+    </main>
+
+    <script src="http://cdn.jsdelivr.net/ramda/latest/ramda.min.js"></script>
+    <script src="app.js"></script>
+    <script>
+        var start = '22:00';
+        var chapters = [
+            {  talk: 15, exercises: 0,  solutions: 0, title: 'Introduction' },
+            {  talk: 15, exercises: 10, solutions: 5, title: 'Functions as Units of Abstraction' },
+            {  talk: 15, exercises: 40, solutions: 5, title: 'Currying' },
+            {  talk: 15, exercises: 40, solutions: 5, title: 'Composition' },
+            {  talk: 10, exercises: 15, solutions: 5, title: 'Type Signatures' },
+            {  talk: 10, exercises: 15, solutions: 5, title: 'Common Functions' },
+            {  talk: 30, exercises: 0 , solutions: 0, title: 'Functors' },
+            {  talk: 15, exercises: 45, solutions: 5, title: 'Common Functors' },
+            {  talk: 15, exercises: 45, solutions: 5, title: 'Monads' },
+            {  talk: 5,  exercises: 70, solutions: 0, title: 'Playground' },
+            {  talk: 15, exercises: 0,  solutions: 0, title: 'Resources &amp; Libraries' }
+        ];
+        app(start, chapters);
+    </script>
+</body>
+</html>
