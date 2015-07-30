@@ -16,12 +16,16 @@ var parseTime = function(str) {
     return R.add(R.multiply(R.head(nums), 60), R.nth(1, nums));
 };
 
-//  stringifyTime :: Date -> String
-var stringifyTime = function(t) {
-    var h = zeroPad(t.getHours());
-    var m = zeroPad(t.getMinutes());
-    return R.join(':', [h, m]);
+//  getTime :: Date -> [Number]
+var getTime = function(t) {
+    return R.map(zeroPad, [t.getHours(), t.getMinutes(), t.getSeconds()]);
 };
+
+//  getTimeHM :: Date -> String
+var getTimeHM = R.compose(R.join(':'), R.slice(0, 2), getTime);
+
+//  getTimeHMS :: Date -> String
+var getTimeHMS = R.compose(R.join(':'), getTime);
 
 //  percentage :: Number -> Number -> Number -> Number
 var percentage = function(now, start, end) {
@@ -30,6 +34,7 @@ var percentage = function(now, start, end) {
     return result > 100 ? 100 : result;
 };
 
+// @todo make it more better
 //  getTimeDelta :: String -> String -> Number -> Object -> Tuple(Number, Object)
 var getTimeDelta = R.curry(function(start, now, offset, chapter) {
 
@@ -51,15 +56,7 @@ var getTimeDelta = R.curry(function(start, now, offset, chapter) {
 
 //  getTimeDeltas :: String -> Date -> [Object] -> [Object]
 var getTimeDeltas = function(start, now, chapters) {
-    return R.mapAccum(getTimeDelta(start, parseTime(stringifyTime(now))), 0, chapters)[1];
-};
-
-//  getClock :: Date -> String
-var getClock = function(t) {
-    var h = zeroPad(t.getHours());
-    var m = zeroPad(t.getMinutes());
-    var s = zeroPad(t.getSeconds());
-    return R.join(':', [h, m, s]);
+    return R.mapAccum(getTimeDelta(start, parseTime(getTimeHM(now))), 0, chapters)[1];
 };
 
 
@@ -100,7 +97,7 @@ var app = function(start, chapters) {
 
     var run = function() {
         var now = new Date;
-        domClock.innerHTML = getClock(now);
+        domClock.innerHTML = getTimeHMS(now);
         domChapters.innerHTML = getHTMLChapters(getTimeDeltas(start, now, chapters));
     };
     setInterval(run, 50);
