@@ -28,30 +28,34 @@ var getTimeHM = R.compose(R.join(':'), R.slice(0, 2), getTime);
 var getTimeHMS = R.compose(R.join(':'), getTime);
 
 //  percentage :: Number -> Number -> Number -> Number
-var percentage = function(now, start, end) {
+var percentage = R.curry(function(now, start, end) {
     if (now < start) return 0;
     var result = (now - start) / (end - start) * 100;
     return result > 100 ? 100 : result;
-};
+});
 
-// @todo make it more better
 //  getTimeDelta :: String -> String -> Number -> Object -> Tuple(Number, Object)
 var getTimeDelta = R.curry(function(start, now, offset, chapter) {
 
-    var delta = chapter.talk + chapter.exercises + chapter.solutions;
-    var begin = offset + parseTime(start);
-    var end   = begin + delta;
+    var props = ['talk', 'exercises', 'solutions'];
 
-    var obj = R.merge(chapter, {
-        progress: {
-            talk:      percentage(chapter.talk,      0, delta),
-            exercises: percentage(chapter.exercises, 0, delta),
-            solutions: percentage(chapter.solutions, 0, delta),
-            current:   percentage(now, begin, end)
-        }
-    });
+    var delta = R.compose(R.sum, R.map(R.prop(R.__, chapter)))(props);
+    var begin = R.compose(R.add(offset), parseTime)(start);
+    var end   = R.add(begin, delta);
 
-    return [offset + delta, obj];
+    //  chapterIterator :: Object -> String -> Object
+    var chapterIterator = function(acc, value) {
+        return R.assoc(value, percentage(chapter[value], 0, delta), acc);
+    };
+
+    //  getProgress :: Object -> Object
+    var setProgress = R.compose(
+        R.assoc('current', percentage(now, begin, end)),
+        R.reduce(chapterIterator, R.__, props)
+    );
+
+    var obj = R.assoc('progress', setProgress({}), chapter);
+    return [ R.add(offset, delta), obj ];
 });
 
 //  getTimeDeltas :: String -> Date -> [Object] -> [Object]
@@ -61,7 +65,7 @@ var getTimeDeltas = function(start, now, chapters) {
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/// [Pure] HTML generation
+/// [Pure] HTML templating
 
 //  getHTMLDiv :: String -> String -> String -> String
 var getHTMLDiv = function(cn, perc, i) {
