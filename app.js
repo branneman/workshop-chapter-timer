@@ -2,7 +2,7 @@
 /// [Pure] Time functions
 
 //  toInt :: * -> Number
-var toInt = R.partial(R.flip(R.curry(parseInt)), 10);
+var toInt = R.curry(parseInt)(R.__, 10);
 
 //  zeroPad :: String -> String
 var zeroPad = R.compose(R.slice(-2, Infinity), R.concat('00'));
